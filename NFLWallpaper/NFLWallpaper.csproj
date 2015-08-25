@@ -99,7 +99,6 @@
     <EmbeddedResource Include="Resources\Font\sans-cond-medium.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Background\" />
     <Folder Include="Resources\Helmets\" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +107,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Background\background.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

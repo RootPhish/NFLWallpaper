@@ -16,19 +16,20 @@ namespace NFLWallpaper
         public Form1()
         {
             InitializeComponent();
-            comboBox1.DataSource = new BindingSource(retrieveData.TeamNames, null);
+            comboBox1.DataSource = new BindingSource(retrieveData.TeamFullNames, null);
             comboBox1.DisplayMember = "Value";
             comboBox1.ValueMember = "Key";
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string teamName, teamAbbr;
+            string teamAbbr;
             teamAbbr = ((KeyValuePair<string, string>)comboBox1.SelectedItem).Key.ToString();
             MatchData matchData = retrieveData.getData(teamAbbr);
-            label1.Text = retrieveData.GetTeamFullname(matchData.away);
-            label2.Text = retrieveData.GetTeamFullname(matchData.home);
-            retrieveData.GenerateWallpaper(matchData);
+            label1.Text = retrieveData.TeamFullNames[matchData.away];
+            label2.Text = retrieveData.TeamFullNames[matchData.home];
+            Image i = retrieveData.GenerateWallpaper(matchData);
+            pictureBox1.Image = i;
         }
 
         private void Form1_Load(object sender, EventArgs e)
