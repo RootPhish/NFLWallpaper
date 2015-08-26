@@ -187,6 +187,12 @@ namespace NFLWallpaper
             matchData.time = p.time.ToString();
             return matchData;
         }
+        private float MeasureDisplayString(Graphics g, string text, Font font)
+        {
+            float doubleWidth = g.MeasureString(text+text, font).Width;
+            float singleWidth = g.MeasureString(text, font).Width;
+            return doubleWidth - singleWidth;
+        }
 
         public Image GenerateWallpaper(MatchData data)
         {
@@ -196,7 +202,7 @@ namespace NFLWallpaper
             string homeTeam = GetTeamName(data.home).ToUpper();
             PointF awayCityLocation = new PointF(0f, 400f);
             PointF awayTeamLocation = new PointF(-20f, 440f);
-            SizeF stringSize;
+            float stringSize;
             var assembly = typeof(NFLWallpaper.Program).Assembly;
             string[] names = assembly.GetManifestResourceNames();
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
@@ -205,16 +211,17 @@ namespace NFLWallpaper
                         cityFont = new Font(pfc.Families[1], 15, FontStyle.Bold),
                         dayFont  = new Font(pfc.Families[1], 12, FontStyle.Bold))
             {
-                graphics.DrawString(awayText, cityFont, Brushes.White, awayCityLocation);
-                graphics.DrawString(awayTeam, teamFont, Brushes.White, awayTeamLocation);
-                stringSize = graphics.MeasureString(homeText, cityFont);
-                graphics.DrawString(homeText, cityFont, Brushes.White, new PointF(1600 - stringSize.Width, 400));
-                stringSize = graphics.MeasureString(homeTeam, teamFont);
-                graphics.DrawString(homeTeam, teamFont, Brushes.White, new PointF(1620 - stringSize.Width, 440));
-                stringSize = graphics.MeasureString(data.day, dayFont);
-                graphics.DrawString(data.day, dayFont, Brushes.White, new PointF((1600 - stringSize.Width) / 2, 420));
-                stringSize = graphics.MeasureString(data.time, dayFont);
-                graphics.DrawString(data.time, dayFont, Brushes.White, new PointF((1600 - stringSize.Width) / 2, 450));
+                var groupHeight = teamFont.Height + cityFont.Height;
+                graphics.DrawString(awayText, cityFont, Brushes.White, new PointF(0, (1200 - groupHeight) / 2), new StringFormat(StringFormatFlags.NoClip));
+                graphics.DrawString(awayTeam, teamFont, Brushes.White, new PointF(0, ((1200 - groupHeight) / 2) + cityFont.Height), new StringFormat(StringFormatFlags.NoClip));
+                stringSize = MeasureDisplayString(graphics, homeText, cityFont);
+                graphics.DrawString(homeText, cityFont, Brushes.White, new PointF(1500 - stringSize, (1200 - groupHeight) / 2));
+                stringSize = MeasureDisplayString(graphics, homeTeam, teamFont);
+                graphics.DrawString(homeTeam, teamFont, Brushes.White, new PointF(1500 - stringSize, ((1200 - groupHeight) / 2) + cityFont.Height));
+                stringSize = MeasureDisplayString(graphics, data.day, dayFont);
+                graphics.DrawString(data.day, dayFont, Brushes.White, new PointF((1600 - stringSize) / 2, 420));
+                stringSize = MeasureDisplayString(graphics, data.time, dayFont);
+                graphics.DrawString(data.time, dayFont, Brushes.White, new PointF((1600 - stringSize) / 2, 450));
             }
             return image;
 //            image.Save(@"C:\Temp\test.jpg");
