@@ -187,6 +187,7 @@ namespace NFLWallpaper
             matchData.time = p.time.ToString();
             return matchData;
         }
+
         private float MeasureDisplayString(Graphics g, string text, Font font)
         {
             float doubleWidth = g.MeasureString(text+text, font).Width;
@@ -202,29 +203,39 @@ namespace NFLWallpaper
             string homeTeam = GetTeamName(data.home).ToUpper();
             PointF awayCityLocation = new PointF(0f, 400f);
             PointF awayTeamLocation = new PointF(-20f, 440f);
-            float stringSize;
             var assembly = typeof(NFLWallpaper.Program).Assembly;
             string[] names = assembly.GetManifestResourceNames();
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
             Graphics graphics = Graphics.FromImage(image);
-            using (Font teamFont = new Font(pfc.Families[0], 48, FontStyle.Bold),
-                        cityFont = new Font(pfc.Families[1], 15, FontStyle.Bold),
-                        dayFont  = new Font(pfc.Families[1], 12, FontStyle.Bold))
+            using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
+                        cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
+                        dayFont  = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
             {
-                var groupHeight = teamFont.Height + cityFont.Height;
-                graphics.DrawString(awayText, cityFont, Brushes.White, new PointF(0, (1200 - groupHeight) / 2), new StringFormat(StringFormatFlags.NoClip));
-                graphics.DrawString(awayTeam, teamFont, Brushes.White, new PointF(0, ((1200 - groupHeight) / 2) + cityFont.Height), new StringFormat(StringFormatFlags.NoClip));
-                stringSize = MeasureDisplayString(graphics, homeText, cityFont);
-                graphics.DrawString(homeText, cityFont, Brushes.White, new PointF(1500 - stringSize, (1200 - groupHeight) / 2));
-                stringSize = MeasureDisplayString(graphics, homeTeam, teamFont);
-                graphics.DrawString(homeTeam, teamFont, Brushes.White, new PointF(1500 - stringSize, ((1200 - groupHeight) / 2) + cityFont.Height));
-                stringSize = MeasureDisplayString(graphics, data.day, dayFont);
-                graphics.DrawString(data.day, dayFont, Brushes.White, new PointF((1600 - stringSize) / 2, 420));
-                stringSize = MeasureDisplayString(graphics, data.time, dayFont);
-                graphics.DrawString(data.time, dayFont, Brushes.White, new PointF((1600 - stringSize) / 2, 450));
+                StringFormat format = new StringFormat(StringFormat.GenericTypographic);
+                float height = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                height += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                RectangleF rect = new RectangleF(20, (1200 - height) / 2, 1560, height);
+                format.Alignment = StringAlignment.Near;
+                format.LineAlignment = StringAlignment.Near;
+                graphics.DrawString(awayText, cityFont, Brushes.White, rect, format);
+                format.LineAlignment = StringAlignment.Far;
+                graphics.DrawString(awayTeam, teamFont, Brushes.White, rect, format);
+                format.Alignment = StringAlignment.Far;
+                format.LineAlignment = StringAlignment.Near;
+                graphics.DrawString(homeText, cityFont, Brushes.White, rect, format);
+                format.LineAlignment = StringAlignment.Far;
+                graphics.DrawString(homeTeam, teamFont, Brushes.White, rect, format);
+                rect = new RectangleF(0, 20, 1600, 100);
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Near;
+                graphics.DrawString(data.day, dayFont, Brushes.White, rect, format);
+                format.LineAlignment = StringAlignment.Far;
+                graphics.DrawString(data.time, dayFont, Brushes.White, rect, format);
             }
+            Image helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets.BEN.png"));
+            graphics.DrawImage(helmet, new RectangleF(10, 10, 200, 200));
+            image.Save(@"C:\Temp\test.jpg");
             return image;
-//            image.Save(@"C:\Temp\test.jpg");
         }
 
         public void Dispose()
