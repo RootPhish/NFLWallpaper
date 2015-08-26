@@ -9,13 +9,52 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Windows.Forms;
+using log4net;
+using log4net.Config;
 
 namespace NFLWallpaper
 {
-    class retrieveData
+    class RetrieveData: IDisposable
     {
+        bool disposed = false;
+
+        private static readonly ILog logger = LogManager.GetLogger(typeof(RetrieveData));
+
         private XDocument xd;
         private PrivateFontCollection pfc;
+
+        public RetrieveData()
+        {
+            BasicConfigurator.Configure();
+            loadSchedule();
+            pfc = new PrivateFontCollection();
+            AddFontFromResource(pfc, "NFLWallpaper.Resources.Font.endzone-tech.ttf");
+            AddFontFromResource(pfc, "NFLWallpaper.Resources.Font.sans-cond-medium.ttf");
+            TeamFullNames = new Dictionary<string, string> { };
+            foreach (string key in TeamNames.Keys)
+            {
+                TeamFullNames.Add(key, TeamCities[key] + " " + TeamNames[key]);
+            }
+        }
+
+        private void loadSchedule()
+        {
+            try {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.nfl.com/liveupdate/scorestrip/ss.xml");
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    xd = XDocument.Load(reader);
+                }
+            } catch
+            {
+                logger.Fatal("Unable to load data from NFL website!");
+                MessageBox.Show("Unable to load data from NFL website!\nApplication will exit.", "Fatal error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+        }
 
         private static void AddFontFromResource(PrivateFontCollection privateFontCollection, string fontResourceName)
         {
@@ -35,19 +74,6 @@ namespace NFLWallpaper
             resourceStream.Read(fontBytes, 0, (int)resourceStream.Length);
             resourceStream.Close();
             return fontBytes;
-        }
-
-        public retrieveData()
-        {
-            xd = XDocument.Load("http://www.nfl.com/liveupdate/scorestrip/ss.xml");
-            pfc = new PrivateFontCollection();
-            AddFontFromResource(pfc, "NFLWallpaper.Resources.Font.endzone-tech.ttf");
-            AddFontFromResource(pfc, "NFLWallpaper.Resources.Font.sans-cond-medium.ttf");
-            TeamFullNames = new Dictionary<string, string> { };
-            foreach(string key in TeamNames.Keys)
-            {
-                TeamFullNames.Add(key, TeamCities[key] + " " + TeamNames[key]);
-            }
         }
 
         public Dictionary<string, string> TeamNames = new Dictionary<string, string> {
@@ -175,9 +201,9 @@ namespace NFLWallpaper
             string[] names = assembly.GetManifestResourceNames();
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
             Graphics graphics = Graphics.FromImage(image);
-            using (Font teamFont = new Font(pfc.Families[0], 48),
-                        cityFont = new Font(pfc.Families[1], 15),
-                        dayFont  = new Font(pfc.Families[1], 12))
+            using (Font teamFont = new Font(pfc.Families[0], 48, FontStyle.Bold),
+                        cityFont = new Font(pfc.Families[1], 15, FontStyle.Bold),
+                        dayFont  = new Font(pfc.Families[1], 12, FontStyle.Bold))
             {
                 graphics.DrawString(awayText, cityFont, Brushes.White, awayCityLocation);
                 graphics.DrawString(awayTeam, teamFont, Brushes.White, awayTeamLocation);
@@ -192,6 +218,25 @@ namespace NFLWallpaper
             }
             return image;
 //            image.Save(@"C:\Temp\test.jpg");
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing && (pfc != null))
+            {
+                pfc.Dispose();
+            }
+
+            disposed = true;
         }
     }
 }

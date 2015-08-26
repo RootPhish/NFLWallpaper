@@ -11,7 +11,7 @@ namespace NFLWallpaper
 {
     public partial class Form1 : Form
     {
-        private retrieveData retrieveData = new retrieveData();
+        private RetrieveData retrieveData = new RetrieveData();
 
         public Form1()
         {
@@ -35,5 +35,6 @@ namespace NFLWallpaper
         private void Form1_Load(object sender, EventArgs e)
         {
         }
+
     }
 }
