@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using log4net;
 using log4net.Config;
+using System.Drawing.Drawing2D;
 
 namespace NFLWallpaper
 {
@@ -225,6 +226,10 @@ namespace NFLWallpaper
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
             Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
             using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
                         cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
                         dayFont  = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
@@ -232,13 +237,13 @@ namespace NFLWallpaper
                 StringFormat format = new StringFormat(StringFormat.GenericTypographic);
                 float height = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
                 height += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
-                RectangleF rect = new RectangleF(20, (1200 - height) / 2, 1560, height);
-                format.Alignment = StringAlignment.Near;
+                RectangleF rect = new RectangleF(0, (1300 - height) / 2, 600, height + 10);
+                format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Near;
                 graphics.DrawString(awayText, cityFont, Brushes.White, rect, format);
                 format.LineAlignment = StringAlignment.Far;
                 graphics.DrawString(awayTeam, teamFont, Brushes.White, rect, format);
-                format.Alignment = StringAlignment.Far;
+                rect = new RectangleF(1000, (1300 - height) / 2, 600, height + 10);
                 format.LineAlignment = StringAlignment.Near;
                 graphics.DrawString(homeText, cityFont, Brushes.White, rect, format);
                 format.LineAlignment = StringAlignment.Far;
@@ -251,8 +256,13 @@ namespace NFLWallpaper
                 format.LineAlignment = StringAlignment.Far;
                 graphics.DrawString(localTime[1], dayFont, Brushes.White, rect, format);
             }
-            Image helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets.BEN.png"));
-            graphics.DrawImage(helmet, new RectangleF(10, 10, 200, 200));
+            Image helmet;
+            helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
+            graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2 + 1000, 300, 280, 212));
+            helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
+            helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2, 300, 280, 212));
+
             image.Save(@"C:\Temp\test.jpg");
             return image;
         }

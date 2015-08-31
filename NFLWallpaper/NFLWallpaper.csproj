@@ -105,7 +105,9 @@
     <EmbeddedResource Include="Resources\Font\endzone-tech.ttf" />
     <EmbeddedResource Include="Resources\Font\sans-cond-medium.ttf" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Helmets\CIN.png" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
@@ -117,7 +119,7 @@
     <EmbeddedResource Include="Resources\Background\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Helmets\BEN.png" />
+    <EmbeddedResource Include="Resources\Helmets\CHI.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
