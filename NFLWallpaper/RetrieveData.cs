@@ -174,6 +174,7 @@ namespace NFLWallpaper
                        where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
                        select new
                        {
+                           eid = item.Attribute("eid").Value,
                            home = item.Attribute("h").Value,
                            away = item.Attribute("v").Value,
                            time = item.Attribute("t").Value,
@@ -181,6 +182,7 @@ namespace NFLWallpaper
                        };
             var p = data.First();
             MatchData matchData;
+            matchData.eid = p.eid.ToString();
             matchData.home = p.home.ToString();
             matchData.away = p.away.ToString();
             matchData.day = p.day.ToString();
@@ -188,11 +190,26 @@ namespace NFLWallpaper
             return matchData;
         }
 
-        private float MeasureDisplayString(Graphics g, string text, Font font)
+        public string[] ConvertTimeZone(String eid, String time)
         {
-            float doubleWidth = g.MeasureString(text+text, font).Width;
-            float singleWidth = g.MeasureString(text, font).Width;
-            return doubleWidth - singleWidth;
+            int h, m;
+            DateTime easternTime, localTime;
+
+            string dateString = eid.Substring(0, 8);
+            string pacificZoneId = "Eastern Standard Time";
+            TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById(pacificZoneId);
+
+            easternTime = DateTime.ParseExact(dateString, "yyyyMMdd", null);
+            int.TryParse(time.Substring(0, time.IndexOf(":")), out h);
+            h += 12;
+            int.TryParse(time.Substring(time.IndexOf(":") + 1), out m);
+            easternTime = easternTime.Add(new TimeSpan(h, m, 0));
+            DateTime UTC = TimeZoneInfo.ConvertTimeToUtc(easternTime, pacificZone);
+            localTime = UTC.ToLocalTime();
+            string[] result = new string[2];
+            result[0] = localTime.DayOfWeek.ToString();
+            result[1] = localTime.TimeOfDay.ToString();
+            return result;
         }
 
         public Image GenerateWallpaper(MatchData data)
@@ -207,6 +224,7 @@ namespace NFLWallpaper
             string[] names = assembly.GetManifestResourceNames();
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
             Graphics graphics = Graphics.FromImage(image);
+            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
                         cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
                         dayFont  = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
@@ -225,12 +243,13 @@ namespace NFLWallpaper
                 graphics.DrawString(homeText, cityFont, Brushes.White, rect, format);
                 format.LineAlignment = StringAlignment.Far;
                 graphics.DrawString(homeTeam, teamFont, Brushes.White, rect, format);
-                rect = new RectangleF(0, 20, 1600, 100);
+                string[] localTime = ConvertTimeZone(data.eid, data.time);
+                rect = new RectangleF(0, 20, 1600, 150);
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Near;
-                graphics.DrawString(data.day, dayFont, Brushes.White, rect, format);
+                graphics.DrawString(localTime[0], dayFont, Brushes.White, rect, format);
                 format.LineAlignment = StringAlignment.Far;
-                graphics.DrawString(data.time, dayFont, Brushes.White, rect, format);
+                graphics.DrawString(localTime[1], dayFont, Brushes.White, rect, format);
             }
             Image helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets.BEN.png"));
             graphics.DrawImage(helmet, new RectangleF(10, 10, 200, 200));

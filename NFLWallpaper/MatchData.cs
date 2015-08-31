@@ -7,6 +7,6 @@ namespace NFLWallpaper
 {
     public struct MatchData
     {
-        public string home, away, day, time;
+        public string eid, home, away, day, time;
     }
 }
