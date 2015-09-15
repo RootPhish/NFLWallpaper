@@ -22,7 +22,7 @@ namespace NFLWallpaper
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(RetrieveData));
 
-        private XDocument xd;
+        private XDocument curWeek, nextWeek;
         private PrivateFontCollection pfc;
 
         public RetrieveData()
@@ -47,10 +47,44 @@ namespace NFLWallpaper
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
-                    xd = XDocument.Load(reader);
+                    XDocument xml = XDocument.Load(reader);
+                    var gms = (
+                        from item in xml.Root.Descendants("gms")
+                        select new
+                        {
+                            type = item.Attribute("t").Value,
+                            year = item.Attribute("y").Value,
+                            week = item.Attribute("w").Value
+                        }).First();
+                    string gameType;
+                    switch (gms.type)
+                    {
+                        case "R":
+                            gameType = "REG";
+                            break;
+                        case "P":
+                            gameType = "PRE";
+                            break;
+                        default:
+                            gameType = "";
+                            break;
+                    }
+                    HttpWebRequest curWeekRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.nfl.com/ajax/scorestrip?season={0}&seasonType={1}&week={2}", gms.year, gameType, gms.week));
+                    using (HttpWebResponse subResponse = (HttpWebResponse)curWeekRequest.GetResponse())
+                    {
+                        StreamReader subReader = new StreamReader(subResponse.GetResponseStream());
+                        curWeek = XDocument.Load(subReader);
+                    }
+                    HttpWebRequest nextWeekRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.nfl.com/ajax/scorestrip?season={0}&seasonType={1}&week={2}", gms.year, gameType, int.Parse(gms.week) + 1));
+                    using (HttpWebResponse subResponse = (HttpWebResponse)nextWeekRequest.GetResponse())
+                    {
+                        StreamReader subReader = new StreamReader(subResponse.GetResponseStream());
+                        nextWeek = XDocument.Load(subReader);
+                    }
                 }
-            } catch
+            } catch (Exception e)
             {
+                logger.Debug(e.Message);
                 logger.Fatal("Unable to load data from NFL website!");
                 MessageBox.Show("Unable to load data from NFL website!\nApplication will exit.", "Fatal error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
@@ -171,7 +205,7 @@ namespace NFLWallpaper
 
         public MatchData getData(string teamAbbr)
         {
-            var data = from item in xd.Descendants("g")
+            var data = from item in curWeek.Descendants("g")
                        where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
                        select new
                        {
