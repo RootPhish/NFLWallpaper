@@ -213,6 +213,14 @@ namespace NFLWallpaper
             return result;
         }
 
+        private void DrawText(Graphics graphics, string text, Font font, RectangleF rect, StringFormat format, float offset)
+        {
+            rect.Offset(offset, offset);
+            graphics.DrawString(text, font, Brushes.Black, rect, format);
+            rect.Offset(-offset, -offset);
+            graphics.DrawString(text, font, Brushes.White, rect, format);
+        }
+
         public Image GenerateWallpaper(MatchData data)
         {
             string awayText = GetTeamCity(data.away).ToUpper();
@@ -240,21 +248,21 @@ namespace NFLWallpaper
                 RectangleF rect = new RectangleF(0, (1300 - height) / 2, 600, height + 10);
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Near;
-                graphics.DrawString(awayText, cityFont, Brushes.White, rect, format);
+                DrawText(graphics, awayText, cityFont, rect, format, 5f);
                 format.LineAlignment = StringAlignment.Far;
-                graphics.DrawString(awayTeam, teamFont, Brushes.White, rect, format);
+                DrawText(graphics, awayTeam, teamFont, rect, format, 5f);
                 rect = new RectangleF(1000, (1300 - height) / 2, 600, height + 10);
                 format.LineAlignment = StringAlignment.Near;
-                graphics.DrawString(homeText, cityFont, Brushes.White, rect, format);
+                DrawText(graphics, homeText, cityFont, rect, format, 5f);
                 format.LineAlignment = StringAlignment.Far;
-                graphics.DrawString(homeTeam, teamFont, Brushes.White, rect, format);
+                DrawText(graphics, homeTeam, teamFont, rect, format, 5f);
                 string[] localTime = ConvertTimeZone(data.eid, data.time);
                 rect = new RectangleF(0, 20, 1600, 150);
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Near;
-                graphics.DrawString(localTime[0], dayFont, Brushes.White, rect, format);
+                DrawText(graphics, localTime[0], dayFont, rect, format, 5f);
                 format.LineAlignment = StringAlignment.Far;
-                graphics.DrawString(localTime[1], dayFont, Brushes.White, rect, format);
+                DrawText(graphics, localTime[1], dayFont, rect, format, 5f);
             }
             Image helmet;
             helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
