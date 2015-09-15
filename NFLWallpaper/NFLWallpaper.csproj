@@ -119,7 +119,7 @@
     <EmbeddedResource Include="Resources\Background\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Helmets\OAK.png" />
+    <EmbeddedResource Include="Resources\Helmets\SD.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

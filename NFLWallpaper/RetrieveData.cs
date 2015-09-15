@@ -213,9 +213,23 @@ namespace NFLWallpaper
                            home = item.Attribute("h").Value,
                            away = item.Attribute("v").Value,
                            time = item.Attribute("t").Value,
-                           day  = item.Attribute("d").Value
+                           day = item.Attribute("d").Value
                        };
             var p = data.First();
+            if (DatePassed(p.eid.ToString(), p.time.ToString()))
+            {
+                data = from item in nextWeek.Descendants("g")
+                           where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
+                           select new
+                           {
+                               eid = item.Attribute("eid").Value,
+                               home = item.Attribute("h").Value,
+                               away = item.Attribute("v").Value,
+                               time = item.Attribute("t").Value,
+                               day = item.Attribute("d").Value
+                           };
+                p = data.First();
+            }
             MatchData matchData;
             matchData.eid = p.eid.ToString();
             matchData.home = p.home.ToString();
@@ -225,7 +239,12 @@ namespace NFLWallpaper
             return matchData;
         }
 
-        public string[] ConvertTimeZone(String eid, String time)
+        private bool DatePassed(String eid, String time)
+        {
+            return ConvertToLocalTime(eid, time) < DateTime.Now;
+        }
+
+        private DateTime ConvertToLocalTime(String eid, String time)
         {
             int h, m;
             DateTime easternTime, localTime;
@@ -241,6 +260,12 @@ namespace NFLWallpaper
             easternTime = easternTime.Add(new TimeSpan(h, m, 0));
             DateTime UTC = TimeZoneInfo.ConvertTimeToUtc(easternTime, pacificZone);
             localTime = UTC.ToLocalTime();
+            return localTime;
+        }
+
+        private string[] ConvertTimeZone(String eid, String time)
+        {
+            DateTime localTime = ConvertToLocalTime(eid, time);
             string[] result = new string[2];
             result[0] = localTime.DayOfWeek.ToString();
             result[1] = localTime.TimeOfDay.ToString();
@@ -266,6 +291,8 @@ namespace NFLWallpaper
             var assembly = typeof(NFLWallpaper.Program).Assembly;
             string[] names = assembly.GetManifestResourceNames();
             Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
+            double backgroundWidth = image.Width;
+            double backgroundHeight = image.Height;
             Graphics graphics = Graphics.FromImage(image);
             graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -291,7 +318,7 @@ namespace NFLWallpaper
                 format.LineAlignment = StringAlignment.Far;
                 DrawText(graphics, homeTeam, teamFont, rect, format, 5f);
                 string[] localTime = ConvertTimeZone(data.eid, data.time);
-                rect = new RectangleF(0, 20, 1600, 150);
+                rect = new RectangleF(0, 50, 1600, 120);
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Near;
                 DrawText(graphics, localTime[0], dayFont, rect, format, 5f);
