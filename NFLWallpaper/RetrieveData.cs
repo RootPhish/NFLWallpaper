@@ -327,9 +327,9 @@ namespace NFLWallpaper
             }
             Image helmet;
             helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
+            helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
             graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2 + 1000, 300, 280, 212));
             helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
-            helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
             graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2, 300, 280, 212));
 
             image.Save(@"C:\Temp\test.jpg");

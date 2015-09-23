@@ -121,6 +121,38 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Helmets\SD.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Helmets\ARI.png" />
+    <EmbeddedResource Include="Resources\Helmets\ATL.png" />
+    <EmbeddedResource Include="Resources\Helmets\BAL.png" />
+    <EmbeddedResource Include="Resources\Helmets\BUF.png" />
+    <EmbeddedResource Include="Resources\Helmets\CAR.png" />
+    <EmbeddedResource Include="Resources\Helmets\CHI.png" />
+    <EmbeddedResource Include="Resources\Helmets\CLE.png" />
+    <EmbeddedResource Include="Resources\Helmets\DAL.png" />
+    <EmbeddedResource Include="Resources\Helmets\DEN.png" />
+    <EmbeddedResource Include="Resources\Helmets\DET.png" />
+    <EmbeddedResource Include="Resources\Helmets\GB.png" />
+    <EmbeddedResource Include="Resources\Helmets\HOU.png" />
+    <EmbeddedResource Include="Resources\Helmets\IND.png" />
+    <EmbeddedResource Include="Resources\Helmets\JAC.png" />
+    <EmbeddedResource Include="Resources\Helmets\KC.png" />
+    <EmbeddedResource Include="Resources\Helmets\MIA.png" />
+    <EmbeddedResource Include="Resources\Helmets\MIN.png" />
+    <EmbeddedResource Include="Resources\Helmets\NE.png" />
+    <EmbeddedResource Include="Resources\Helmets\NO.png" />
+    <EmbeddedResource Include="Resources\Helmets\NYG.png" />
+    <EmbeddedResource Include="Resources\Helmets\NYJ.png" />
+    <EmbeddedResource Include="Resources\Helmets\OAK.png" />
+    <EmbeddedResource Include="Resources\Helmets\PHI.png" />
+    <EmbeddedResource Include="Resources\Helmets\PIT.png" />
+    <EmbeddedResource Include="Resources\Helmets\SEA.png" />
+    <EmbeddedResource Include="Resources\Helmets\SF.png" />
+    <EmbeddedResource Include="Resources\Helmets\STL.png" />
+    <EmbeddedResource Include="Resources\Helmets\TB.png" />
+    <EmbeddedResource Include="Resources\Helmets\TEN.png" />
+    <EmbeddedResource Include="Resources\Helmets\WAS.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
