@@ -13,12 +13,26 @@ namespace NFLWallpaper
     {
         private RetrieveData retrieveData = new RetrieveData();
 
+        static bool IsABackground(string resource)
+        {
+            return (resource.StartsWith("NFLWallpaper.Resources.Background."));
+        }
+
         public MainForm()
         {
             InitializeComponent();
             teamSelectionCombo.DataSource = new BindingSource(retrieveData.TeamFullNames, null);
             teamSelectionCombo.DisplayMember = "Value";
             teamSelectionCombo.ValueMember = "Key";
+            var assembly = typeof(NFLWallpaper.Program).Assembly;
+            string[] resources = Array.FindAll(assembly.GetManifestResourceNames(), IsABackground);
+            foreach (string resource in resources)
+            {
+                string background = resource.Substring(34, resource.Length - 38);
+                bgSelectionCombo.Items.Add(background);
+            }
+            bgSelectionCombo.SelectedIndex = 0;
+            bgSelectionCombo.Items.Add("Other...");
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -34,7 +48,7 @@ namespace NFLWallpaper
             string teamAbbr;
             teamAbbr = ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString();
             MatchData matchData = retrieveData.getData(teamAbbr);
-            Image i = retrieveData.GenerateWallpaper(matchData);
+            Image i = retrieveData.GenerateWallpaper(matchData, bgSelectionCombo.SelectedItem.ToString());
             pictureBox1.Image = i;
             saveButton.Enabled = true;
         }
@@ -68,6 +82,30 @@ namespace NFLWallpaper
 
                 }
                 fs.Close();
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bgSelectionCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (bgSelectionCombo.SelectedItem.ToString() == "Other...")
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "JPEG Image|*.jpg";
+                ofd.Title = "Select Background Image";
+                ofd.ShowDialog();
+
+                if (ofd.FileName != "")
+                {
+                    bgSelectionCombo.Items.Remove("Other...");
+                    bgSelectionCombo.Items.Add(ofd.FileName);
+                    bgSelectionCombo.Items.Add("Other...");
+                    bgSelectionCombo.SelectedIndex = bgSelectionCombo.Items.Count - 2;
+                }
             }
         }
     }

@@ -35,6 +35,8 @@
             this.generateButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
+            this.bgSelectionCombo = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +61,7 @@
             // 
             // generateButton
             // 
-            this.generateButton.Location = new System.Drawing.Point(81, 161);
+            this.generateButton.Location = new System.Drawing.Point(81, 218);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(75, 23);
             this.generateButton.TabIndex = 5;
@@ -80,7 +82,7 @@
             // saveButton
             // 
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(180, 161);
+            this.saveButton.Location = new System.Drawing.Point(180, 218);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 7;
@@ -88,11 +90,32 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // bgSelectionCombo
+            // 
+            this.bgSelectionCombo.FormattingEnabled = true;
+            this.bgSelectionCombo.Location = new System.Drawing.Point(81, 179);
+            this.bgSelectionCombo.Name = "bgSelectionCombo";
+            this.bgSelectionCombo.Size = new System.Drawing.Size(174, 21);
+            this.bgSelectionCombo.TabIndex = 8;
+            this.bgSelectionCombo.SelectedIndexChanged += new System.EventHandler(this.bgSelectionCombo_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(81, 160);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(97, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Select background";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1233, 624);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.bgSelectionCombo);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.generateButton);
@@ -115,6 +138,8 @@
         private System.Windows.Forms.Button generateButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.ComboBox bgSelectionCombo;
+        private System.Windows.Forms.Label label2;
     }
 }
 

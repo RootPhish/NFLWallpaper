@@ -272,7 +272,7 @@ namespace NFLWallpaper
             graphics.DrawString(text, font, Brushes.White, rect, format);
         }
 
-        public Image GenerateWallpaper(MatchData data)
+        public Image GenerateWallpaper(MatchData data, string background)
         {
             string awayText = GetTeamCity(data.away).ToUpper();
             string awayTeam = GetTeamName(data.away).ToUpper();
@@ -283,50 +283,61 @@ namespace NFLWallpaper
             PointF awayTeamLocation = new PointF(-20f, 440f);
             var assembly = typeof(NFLWallpaper.Program).Assembly;
             string[] names = assembly.GetManifestResourceNames();
-            Image image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background.background.jpg"));
-            double backgroundWidth = image.Width;
-            double backgroundHeight = image.Height;
-            Graphics graphics = Graphics.FromImage(image);
-            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
-                        cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
-                        dayFont  = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
+            Image image;
+            if (background.Contains("\\"))
             {
-                StringFormat format = new StringFormat(StringFormat.GenericTypographic);
-                float height = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
-                height += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
-                RectangleF rect = new RectangleF(0, (1300 - height) / 2, 600, height + 10);
-                format.Alignment = StringAlignment.Center;
-                format.LineAlignment = StringAlignment.Near;
-                DrawText(graphics, awayText, cityFont, rect, format, 5f);
-                format.LineAlignment = StringAlignment.Far;
-                DrawText(graphics, awayTeam, teamFont, rect, format, 5f);
-                rect = new RectangleF(1000, (1300 - height) / 2, 600, height + 10);
-                format.LineAlignment = StringAlignment.Near;
-                DrawText(graphics, homeText, cityFont, rect, format, 5f);
-                format.LineAlignment = StringAlignment.Far;
-                DrawText(graphics, homeTeam, teamFont, rect, format, 5f);
-                DateTime localTime = ConvertToLocalTime(data.eid, data.time);
-                rect = new RectangleF(0, 50, 1600, 120);
-                format.Alignment = StringAlignment.Center;
-                format.LineAlignment = StringAlignment.Near;
-                DrawText(graphics, localTime.ToString("D", enUS), dayFont, rect, format, 5f);
-                format.LineAlignment = StringAlignment.Far;
-                DrawText(graphics, localTime.ToString("t"), dayFont, rect, format, 5f);
+                image = Image.FromFile(background);
+            } else {
+                image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background." + background + ".jpg"));
             }
-            Image helmet;
-            helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
-            helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2 + 1000, 300, 280, 212));
-            helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
-            graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2, 300, 280, 212));
+            if (image != null) {
+                double backgroundWidth = image.Width;
+                double backgroundHeight = image.Height;
+                Graphics graphics = Graphics.FromImage(image);
+                graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-//            image.Save(@"C:\Temp\test.jpg");
-            return image;
+                using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
+                            cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
+                            dayFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
+                {
+                    StringFormat format = new StringFormat(StringFormat.GenericTypographic);
+                    float height = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                    height += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                    RectangleF rect = new RectangleF(0, (1300 - height) / 2, 600, height + 10);
+                    format.Alignment = StringAlignment.Center;
+                    format.LineAlignment = StringAlignment.Near;
+                    DrawText(graphics, awayText, cityFont, rect, format, 5f);
+                    format.LineAlignment = StringAlignment.Far;
+                    DrawText(graphics, awayTeam, teamFont, rect, format, 5f);
+                    rect = new RectangleF(1000, (1300 - height) / 2, 600, height + 10);
+                    format.LineAlignment = StringAlignment.Near;
+                    DrawText(graphics, homeText, cityFont, rect, format, 5f);
+                    format.LineAlignment = StringAlignment.Far;
+                    DrawText(graphics, homeTeam, teamFont, rect, format, 5f);
+                    DateTime localTime = ConvertToLocalTime(data.eid, data.time);
+                    rect = new RectangleF(0, 50, 1600, 120);
+                    format.Alignment = StringAlignment.Center;
+                    format.LineAlignment = StringAlignment.Near;
+                    DrawText(graphics, localTime.ToString("D", enUS), dayFont, rect, format, 5f);
+                    format.LineAlignment = StringAlignment.Far;
+                    DrawText(graphics, localTime.ToString("t"), dayFont, rect, format, 5f);
+                }
+                Image helmet;
+                helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
+                helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2 + 1000, 300, 280, 212));
+                helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
+                graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2, 300, 280, 212));
+
+                //            image.Save(@"C:\Temp\test.jpg");
+                return image;
+            } else
+            {
+                return null;
+            }
         }
 
         public void Dispose()
