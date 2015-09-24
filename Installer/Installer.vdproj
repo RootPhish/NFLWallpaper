@@ -85,6 +85,11 @@
                     "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.4.5"
+                    {
+                    "Name" = "8:Windows Installer 4.5"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.4.5"
+                    }
                 }
             }
         }
@@ -108,7 +113,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.5"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=395269"
                 }
@@ -204,7 +209,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NFLWallpaper"
         "ProductCode" = "8:{643ECBDF-00C1-467D-95F8-57B00181A8E0}"
-        "PackageCode" = "8:{9F963D3C-9991-4B57-980E-E14469E44052}"
+        "PackageCode" = "8:{3E2E3F3D-AFEC-45CF-9060-AE342BFB0FFD}"
         "UpgradeCode" = "8:{3FC397DC-9889-4568-9A07-BC08A2842CE0}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

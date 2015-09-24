@@ -34,10 +34,41 @@ namespace NFLWallpaper
             string teamAbbr;
             teamAbbr = ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString();
             MatchData matchData = retrieveData.getData(teamAbbr);
-            label1.Text = retrieveData.TeamFullNames[matchData.away];
-            label2.Text = retrieveData.TeamFullNames[matchData.home];
             Image i = retrieveData.GenerateWallpaper(matchData);
             pictureBox1.Image = i;
+            saveButton.Enabled = true;
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "JPEG Image|*.jpg|Bitmap Image|*.bmp|GIF Image|*.gif";
+            sfd.Title = "Save image file";
+            sfd.ShowDialog();
+
+            if (sfd.FileName != "")
+            {
+                System.IO.FileStream fs = (System.IO.FileStream)sfd.OpenFile();
+                switch (sfd.FilterIndex)
+                {
+                    case 1:
+                        this.pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        break;
+                    case 2:
+                        this.pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Bmp);
+                        break;
+                    case 3:
+                        this.pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Gif);
+                        break;
+
+                }
+                fs.Close();
+            }
         }
     }
 }
