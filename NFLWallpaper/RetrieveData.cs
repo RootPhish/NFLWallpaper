@@ -300,48 +300,51 @@ namespace NFLWallpaper
                 image = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Background." + background + ".jpg"));
             }
             if (image != null) {
-                double backgroundWidth = image.Width;
-                double backgroundHeight = image.Height;
+                float backgroundWidth = image.Width;
+                float backgroundHeight = image.Height;
+                float shadowOffset = backgroundHeight / 240f;
+                float helmetHeight = backgroundHeight / 5.660f;
+                float helmetWidth = backgroundHeight / 4.286f;
                 Graphics graphics = Graphics.FromImage(image);
                 graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-                using (Font teamFont = new Font(pfc.Families[0], 150, FontStyle.Bold, GraphicsUnit.Pixel),
-                            cityFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel),
-                            dayFont = new Font(pfc.Families[1], 50, FontStyle.Bold, GraphicsUnit.Pixel))
+                using (Font teamFont = new Font(pfc.Families[0], backgroundWidth / 10f, FontStyle.Bold, GraphicsUnit.Pixel),
+                            cityFont = new Font(pfc.Families[1], backgroundWidth / 30.0f, FontStyle.Bold, GraphicsUnit.Pixel),
+                            dayFont = new Font(pfc.Families[1], backgroundHeight / 22.5f, FontStyle.Bold, GraphicsUnit.Pixel))
                 {
                     StringFormat format = new StringFormat(StringFormat.GenericTypographic);
-                    float height = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
-                    height += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
-                    RectangleF rect = new RectangleF(0, (1300 - height) / 2, 600, height + 10);
-                    format.Alignment = StringAlignment.Center;
+                    float teamHeight = cityFont.Size * cityFont.FontFamily.GetLineSpacing(FontStyle.Bold) / cityFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                    teamHeight += teamFont.Size * teamFont.FontFamily.GetCellAscent(FontStyle.Bold) / teamFont.FontFamily.GetEmHeight(FontStyle.Bold);
+                    teamHeight = teamHeight * 1.05f;
+                    RectangleF rect = new RectangleF(backgroundWidth / 50, (backgroundHeight - teamHeight - helmetHeight) / 2 + helmetHeight, backgroundWidth / 2, teamHeight);
+                    format.Alignment = StringAlignment.Near;
                     format.LineAlignment = StringAlignment.Near;
-                    DrawText(graphics, awayText, cityFont, rect, format, 5f);
+                    DrawText(graphics, awayText, cityFont, rect, format, shadowOffset);
                     format.LineAlignment = StringAlignment.Far;
-                    DrawText(graphics, awayTeam, teamFont, rect, format, 5f);
-                    rect = new RectangleF(1000, (1300 - height) / 2, 600, height + 10);
+                    DrawText(graphics, awayTeam, teamFont, rect, format, shadowOffset);
+                    rect = new RectangleF(backgroundWidth / 2 - backgroundWidth / 50, (backgroundHeight - teamHeight - helmetHeight) / 2 + helmetHeight, backgroundWidth / 2, teamHeight);
+                    format.Alignment = StringAlignment.Far;
                     format.LineAlignment = StringAlignment.Near;
-                    DrawText(graphics, homeText, cityFont, rect, format, 5f);
+                    DrawText(graphics, homeText, cityFont, rect, format, shadowOffset);
                     format.LineAlignment = StringAlignment.Far;
-                    DrawText(graphics, homeTeam, teamFont, rect, format, 5f);
+                    DrawText(graphics, homeTeam, teamFont, rect, format, shadowOffset);
                     DateTime localTime = ConvertToLocalTime(data.eid, data.time);
-                    rect = new RectangleF(0, 50, 1600, 120);
+                    rect = new RectangleF(0, backgroundHeight / 24, backgroundWidth, backgroundHeight / 10);
                     format.Alignment = StringAlignment.Center;
                     format.LineAlignment = StringAlignment.Near;
-                    DrawText(graphics, localTime.ToString("D", enUS), dayFont, rect, format, 5f);
+                    DrawText(graphics, localTime.ToString("D", enUS), dayFont, rect, format, shadowOffset);
                     format.LineAlignment = StringAlignment.Far;
-                    DrawText(graphics, localTime.ToString("t"), dayFont, rect, format, 5f);
+                    DrawText(graphics, localTime.ToString("t"), dayFont, rect, format, shadowOffset);
+                    Image helmet;
+                    helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
+                    helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    graphics.DrawImage(helmet, new RectangleF(backgroundWidth - helmetWidth - backgroundWidth / 50, (backgroundHeight - teamHeight - helmetHeight) / 2, helmetWidth, helmetHeight));
+                    helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
+                    graphics.DrawImage(helmet, new RectangleF(backgroundWidth / 50, (backgroundHeight - teamHeight - helmetHeight) / 2, helmetWidth, helmetHeight));
                 }
-                Image helmet;
-                helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
-                helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2 + 1000, 300, 280, 212));
-                helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.away + ".png"));
-                graphics.DrawImage(helmet, new RectangleF((600 - 280) / 2, 300, 280, 212));
-
-                //            image.Save(@"C:\Temp\test.jpg");
                 return image;
             } else
             {
