@@ -24,7 +24,9 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>\\mine01\c%24\publish\</InstallUrl>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ProductName>NFLWallpaper</ProductName>
+    <PublisherName>RootPhish</PublisherName>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -54,10 +56,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A782D97840EFAAD091C40D23DFDBB935A18BFD13</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>4A8804F1FB350423CAB5877F721F98887981FCA1</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>NFLWallpaper_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>NFLWallpaper_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -113,6 +115,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="NFLWallpaper_1_TemporaryKey.pfx" />
     <None Include="NFLWallpaper_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
