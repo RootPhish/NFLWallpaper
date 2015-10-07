@@ -48,9 +48,16 @@ namespace NFLWallpaper
             string teamAbbr;
             teamAbbr = ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString();
             MatchData matchData = retrieveData.getData(teamAbbr);
-            Image i = retrieveData.GenerateWallpaper(matchData, bgSelectionCombo.SelectedItem.ToString());
-            pictureBox1.Image = i;
-            saveButton.Enabled = true;
+            if ((matchData.away != null) &&
+                (matchData.home != null) &&
+                (matchData.day != null) &&
+                (matchData.time != null) &&
+                (matchData.eid != null))
+            {
+                Image i = retrieveData.GenerateWallpaper(matchData, bgSelectionCombo.SelectedItem.ToString());
+                pictureBox1.Image = i;
+                saveButton.Enabled = true;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)

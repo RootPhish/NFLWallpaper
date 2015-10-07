@@ -206,6 +206,7 @@ namespace NFLWallpaper
 
         public MatchData getData(string teamAbbr)
         {
+            // First get the date and time for this week's game. If it has already passed, go to next week's game.
             var data = from item in curWeek.Descendants("g")
                        where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
                        select new
@@ -216,8 +217,8 @@ namespace NFLWallpaper
                            time = item.Attribute("t").Value,
                            day = item.Attribute("d").Value
                        };
-            var p = data.First();
-            if (DatePassed(p.eid.ToString(), p.time.ToString()))
+            var p = data.FirstOrDefault();
+            if ((p == null) || (DatePassed(p.eid.ToString(), p.time.ToString())))  // if p is null then there is probably a Bye week for the selected team
             {
                 data = from item in nextWeek.Descendants("g")
                            where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
@@ -229,14 +230,22 @@ namespace NFLWallpaper
                                time = item.Attribute("t").Value,
                                day = item.Attribute("d").Value
                            };
-                p = data.First();
+                p = data.FirstOrDefault();
             }
-            MatchData matchData;
-            matchData.eid = p.eid.ToString();
-            matchData.home = p.home.ToString();
-            matchData.away = p.away.ToString();
-            matchData.day = p.day.ToString();
-            matchData.time = p.time.ToString();
+            MatchData matchData = new MatchData();
+            if (p != null)
+            {
+                matchData.eid = p.eid.ToString();
+                matchData.home = p.home.ToString();
+                matchData.away = p.away.ToString();
+                matchData.day = p.day.ToString();
+                matchData.time = p.time.ToString();
+            }
+            else   // if p is still null here, there is something wrong...
+            {
+                logger.Fatal("Unable to find next match for selected team!");
+                MessageBox.Show("Unable to find next match for selected team!", "Fatal error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             return matchData;
         }
 
