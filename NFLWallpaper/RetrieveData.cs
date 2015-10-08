@@ -288,7 +288,12 @@ string key)
             rect.Offset(offset, offset);
             graphics.DrawString(text, font, Brushes.Black, rect, format);
             rect.Offset(-offset, -offset);
-            graphics.DrawString(text, font, Brushes.White, rect, format);
+            GraphicsPath p = new GraphicsPath();
+            p.AddString(
+                text, font.FontFamily, (int)font.Style, font.Size, rect, format);
+            graphics.DrawPath(Pens.Black, p);
+            graphics.FillPath(Brushes.White, p);
+//            graphics.DrawString(text, font, Brushes.White, rect, format);
         }
 
         public Image GenerateWallpaper(MatchData data, string background)
