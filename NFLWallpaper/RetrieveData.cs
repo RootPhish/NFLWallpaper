@@ -291,7 +291,7 @@ string key)
             GraphicsPath p = new GraphicsPath();
             p.AddString(
                 text, font.FontFamily, (int)font.Style, font.Size, rect, format);
-            graphics.DrawPath(Pens.Black, p);
+            graphics.DrawPath(new Pen(Color.Black, 5), p);
             graphics.FillPath(Brushes.White, p);
 //            graphics.DrawString(text, font, Brushes.White, rect, format);
         }
@@ -352,7 +352,7 @@ string key)
                     format.LineAlignment = StringAlignment.Near;
                     DrawText(graphics, localTime.ToString("D", enUS), dayFont, rect, format, shadowOffset);
                     format.LineAlignment = StringAlignment.Far;
-                    DrawText(graphics, localTime.ToString("t"), dayFont, rect, format, shadowOffset);
+                    DrawText(graphics, localTime.ToString("HH:mm"), dayFont, rect, format, shadowOffset);
                     Image helmet;
                     helmet = Image.FromStream(assembly.GetManifestResourceStream("NFLWallpaper.Resources.Helmets." + data.home + ".png"));
                     helmet.RotateFlip(RotateFlipType.RotateNoneFlipX);

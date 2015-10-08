@@ -43,7 +43,7 @@
             // teamSelectionCombo
             // 
             this.teamSelectionCombo.FormattingEnabled = true;
-            this.teamSelectionCombo.Location = new System.Drawing.Point(162, 235);
+            this.teamSelectionCombo.Location = new System.Drawing.Point(33, 73);
             this.teamSelectionCombo.Margin = new System.Windows.Forms.Padding(4);
             this.teamSelectionCombo.Name = "teamSelectionCombo";
             this.teamSelectionCombo.Size = new System.Drawing.Size(344, 33);
@@ -53,17 +53,20 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(822, 177);
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(435, 36);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1564, 960);
+            this.pictureBox1.Size = new System.Drawing.Size(1159, 642);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
             // generateButton
             // 
-            this.generateButton.Location = new System.Drawing.Point(162, 419);
+            this.generateButton.Location = new System.Drawing.Point(33, 257);
             this.generateButton.Margin = new System.Windows.Forms.Padding(6);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(150, 44);
@@ -75,7 +78,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(162, 200);
+            this.label1.Location = new System.Drawing.Point(33, 38);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(262, 25);
@@ -86,7 +89,7 @@
             // saveButton
             // 
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(360, 419);
+            this.saveButton.Location = new System.Drawing.Point(231, 257);
             this.saveButton.Margin = new System.Windows.Forms.Padding(6);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(150, 44);
@@ -98,7 +101,7 @@
             // bgSelectionCombo
             // 
             this.bgSelectionCombo.FormattingEnabled = true;
-            this.bgSelectionCombo.Location = new System.Drawing.Point(162, 344);
+            this.bgSelectionCombo.Location = new System.Drawing.Point(33, 182);
             this.bgSelectionCombo.Margin = new System.Windows.Forms.Padding(6);
             this.bgSelectionCombo.Name = "bgSelectionCombo";
             this.bgSelectionCombo.Size = new System.Drawing.Size(344, 33);
@@ -108,7 +111,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(162, 308);
+            this.label2.Location = new System.Drawing.Point(33, 146);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(191, 25);
@@ -120,7 +123,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2466, 1200);
+            this.ClientSize = new System.Drawing.Size(1637, 710);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.bgSelectionCombo);
             this.Controls.Add(this.saveButton);
