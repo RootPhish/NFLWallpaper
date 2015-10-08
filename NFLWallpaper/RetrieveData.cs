@@ -17,6 +17,16 @@ using System.Globalization;
 
 namespace NFLWallpaper
 {
+    public static class Helper
+    {
+        public static KeyValuePair<string, string> GetEntry
+(this IDictionary<string, string> dictionary,
+string key)
+        {
+            return new KeyValuePair<string, string>(key, dictionary[key]);
+        }
+    }
+
     class RetrieveData: IDisposable
     {
         bool disposed = false;

@@ -43,27 +43,30 @@
             // teamSelectionCombo
             // 
             this.teamSelectionCombo.FormattingEnabled = true;
-            this.teamSelectionCombo.Location = new System.Drawing.Point(81, 122);
-            this.teamSelectionCombo.Margin = new System.Windows.Forms.Padding(2);
+            this.teamSelectionCombo.Location = new System.Drawing.Point(162, 235);
+            this.teamSelectionCombo.Margin = new System.Windows.Forms.Padding(4);
             this.teamSelectionCombo.Name = "teamSelectionCombo";
-            this.teamSelectionCombo.Size = new System.Drawing.Size(174, 21);
+            this.teamSelectionCombo.Size = new System.Drawing.Size(344, 33);
+            this.teamSelectionCombo.Sorted = true;
             this.teamSelectionCombo.TabIndex = 0;
             this.teamSelectionCombo.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(411, 92);
+            this.pictureBox1.Location = new System.Drawing.Point(822, 177);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(782, 499);
+            this.pictureBox1.Size = new System.Drawing.Size(1564, 960);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
             // generateButton
             // 
-            this.generateButton.Location = new System.Drawing.Point(81, 218);
+            this.generateButton.Location = new System.Drawing.Point(162, 419);
+            this.generateButton.Margin = new System.Windows.Forms.Padding(6);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(75, 23);
+            this.generateButton.Size = new System.Drawing.Size(150, 44);
             this.generateButton.TabIndex = 5;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -72,9 +75,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(81, 104);
+            this.label1.Location = new System.Drawing.Point(162, 200);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(130, 13);
+            this.label1.Size = new System.Drawing.Size(262, 25);
             this.label1.TabIndex = 6;
             this.label1.Text = "Select your favourite team";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -82,9 +86,10 @@
             // saveButton
             // 
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(180, 218);
+            this.saveButton.Location = new System.Drawing.Point(360, 419);
+            this.saveButton.Margin = new System.Windows.Forms.Padding(6);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.Size = new System.Drawing.Size(150, 44);
             this.saveButton.TabIndex = 7;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -93,27 +98,29 @@
             // bgSelectionCombo
             // 
             this.bgSelectionCombo.FormattingEnabled = true;
-            this.bgSelectionCombo.Location = new System.Drawing.Point(81, 179);
+            this.bgSelectionCombo.Location = new System.Drawing.Point(162, 344);
+            this.bgSelectionCombo.Margin = new System.Windows.Forms.Padding(6);
             this.bgSelectionCombo.Name = "bgSelectionCombo";
-            this.bgSelectionCombo.Size = new System.Drawing.Size(174, 21);
+            this.bgSelectionCombo.Size = new System.Drawing.Size(344, 33);
             this.bgSelectionCombo.TabIndex = 8;
             this.bgSelectionCombo.SelectedIndexChanged += new System.EventHandler(this.bgSelectionCombo_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(81, 160);
+            this.label2.Location = new System.Drawing.Point(162, 308);
+            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(97, 13);
+            this.label2.Size = new System.Drawing.Size(191, 25);
             this.label2.TabIndex = 9;
             this.label2.Text = "Select background";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1233, 624);
+            this.ClientSize = new System.Drawing.Size(2466, 1200);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.bgSelectionCombo);
             this.Controls.Add(this.saveButton);
@@ -121,9 +128,10 @@
             this.Controls.Add(this.generateButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.teamSelectionCombo);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "NFLWallpaper";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

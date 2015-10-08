@@ -41,6 +41,13 @@ namespace NFLWallpaper
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                teamSelectionCombo.SelectedItem = Helper.GetEntry(retrieveData.TeamFullNames, Application.UserAppDataRegistry.GetValue("DefaultTeam").ToString());
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void generateButton_Click(object sender, EventArgs e)
@@ -113,6 +120,18 @@ namespace NFLWallpaper
                     bgSelectionCombo.Items.Add("Other...");
                     bgSelectionCombo.SelectedIndex = bgSelectionCombo.Items.Count - 2;
                 }
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                Application.UserAppDataRegistry.SetValue("DefaultTeam", ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }
