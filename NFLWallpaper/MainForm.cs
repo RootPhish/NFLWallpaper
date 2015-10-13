@@ -35,41 +35,47 @@ namespace NFLWallpaper
             bgSelectionCombo.Items.Add("Other...");
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
                 teamSelectionCombo.SelectedItem = Helper.GetEntry(retrieveData.TeamFullNames, Application.UserAppDataRegistry.GetValue("DefaultTeam").ToString());
+                string wallpaperStyle = Application.UserAppDataRegistry.GetValue("WallpaperStyle").ToString();
+                switch (wallpaperStyle)
+                {
+                    case "Stretched": radioButton1.Checked = true; break;
+                    case "Centered": radioButton2.Checked = true; break;
+                    case "Tiled": radioButton3.Checked = true; break;
+                }
             }
             catch (Exception ex)
             {
             }
+            generateButton_Click(null, null);
         }
 
         private void generateButton_Click(object sender, EventArgs e)
         {
-            string teamAbbr;
-            teamAbbr = ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString();
-            MatchData matchData = retrieveData.getData(teamAbbr);
-            if ((matchData.away != null) &&
-                (matchData.home != null) &&
-                (matchData.day != null) &&
-                (matchData.time != null) &&
-                (matchData.eid != null))
+            if (bgSelectionCombo.SelectedItem.ToString() == "Other...")
             {
-                Image i = retrieveData.GenerateWallpaper(matchData, bgSelectionCombo.SelectedItem.ToString());
-                pictureBox1.Image = i;
-                saveButton.Enabled = true;
+                openCustomWallpaper();
+            } else
+            {
+                string teamAbbr;
+                teamAbbr = ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString();
+                MatchData matchData = retrieveData.getData(teamAbbr);
+                if ((matchData.away != null) &&
+                    (matchData.home != null) &&
+                    (matchData.day != null) &&
+                    (matchData.time != null) &&
+                    (matchData.eid != null))
+                {
+                    Image i = retrieveData.GenerateWallpaper(matchData, bgSelectionCombo.SelectedItem.ToString());
+                    pictureBox1.Image = i;
+                    saveButton.Enabled = true;
+                    wallpaperBox.Enabled = true;
+                }
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -93,33 +99,25 @@ namespace NFLWallpaper
                     case 3:
                         this.pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Gif);
                         break;
-
                 }
                 fs.Close();
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void openCustomWallpaper()
         {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "JPEG Image|*.jpg";
+            ofd.Title = "Select Background Image";
+            ofd.ShowDialog();
 
-        }
-
-        private void bgSelectionCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bgSelectionCombo.SelectedItem.ToString() == "Other...")
+            if (ofd.FileName != "")
             {
-                OpenFileDialog ofd = new OpenFileDialog();
-                ofd.Filter = "JPEG Image|*.jpg";
-                ofd.Title = "Select Background Image";
-                ofd.ShowDialog();
-
-                if (ofd.FileName != "")
-                {
-                    bgSelectionCombo.Items.Remove("Other...");
-                    bgSelectionCombo.Items.Add(ofd.FileName);
-                    bgSelectionCombo.Items.Add("Other...");
-                    bgSelectionCombo.SelectedIndex = bgSelectionCombo.Items.Count - 2;
-                }
+                bgSelectionCombo.Items.Remove("Other...");
+                bgSelectionCombo.Items.Add(ofd.FileName);
+                bgSelectionCombo.Items.Add("Other...");
+                bgSelectionCombo.SelectedIndex = bgSelectionCombo.Items.Count - 2;
+                generateButton_Click(null, null);
             }
         }
 
@@ -128,11 +126,27 @@ namespace NFLWallpaper
             try
             {
                 Application.UserAppDataRegistry.SetValue("DefaultTeam", ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString());
+                var checkedButton = wallpaperBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+                Application.UserAppDataRegistry.SetValue("WallpaperStyle", checkedButton.Text);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var checkedButton = wallpaperBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+            Wallpaper.Style style;
+            switch (checkedButton.Text)
+            {
+                case "Centered": style = Wallpaper.Style.Centered; break;
+                case "Stretched": style = Wallpaper.Style.Stretched; break;
+                case "Tiled": style = Wallpaper.Style.Tiled; break;
+                default: style = Wallpaper.Style.Centered; break;
+            }
+            Wallpaper.Set(pictureBox1.Image, style);
         }
     }
 }
