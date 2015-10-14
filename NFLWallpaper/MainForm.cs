@@ -48,7 +48,7 @@ namespace NFLWallpaper
                     case "Tiled": radioButton3.Checked = true; break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             generateButton_Click(null, null);

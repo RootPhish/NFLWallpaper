@@ -2,16 +2,18 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-public sealed class Wallpaper
+public static class Wallpaper
 {
-    Wallpaper() { }
-
     const int SPI_SETDESKWALLPAPER = 20;
     const int SPIF_UPDATEINIFILE = 0x01;
     const int SPIF_SENDWININICHANGE = 0x02;
 
-    [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+    internal static class NativeMethods
+    {
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        [return:MarshalAs(UnmanagedType.I4)]
+        internal static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+    }
 
     public enum Style : int
     {
@@ -46,7 +48,7 @@ public sealed class Wallpaper
             key.SetValue(@"TileWallpaper", 1.ToString());
         }
 
-        SystemParametersInfo(SPI_SETDESKWALLPAPER,
+        NativeMethods.SystemParametersInfo(SPI_SETDESKWALLPAPER,
             0,
             tempPath,
             SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);

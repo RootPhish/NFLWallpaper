@@ -47,6 +47,7 @@
             // 
             // teamSelectionCombo
             // 
+            this.teamSelectionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.teamSelectionCombo.FormattingEnabled = true;
             this.teamSelectionCombo.Location = new System.Drawing.Point(16, 38);
             this.teamSelectionCombo.Margin = new System.Windows.Forms.Padding(2);
@@ -90,6 +91,7 @@
             // 
             // bgSelectionCombo
             // 
+            this.bgSelectionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bgSelectionCombo.FormattingEnabled = true;
             this.bgSelectionCombo.Location = new System.Drawing.Point(16, 95);
             this.bgSelectionCombo.Name = "bgSelectionCombo";
