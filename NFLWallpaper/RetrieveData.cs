@@ -280,7 +280,6 @@ string key)
             easternTime = easternTime.Add(new TimeSpan(h, m, 0));
             DateTime UTC = TimeZoneInfo.ConvertTimeToUtc(easternTime, pacificZone);
             localTime = UTC.ToLocalTime();
-
             return localTime;
         }
 
