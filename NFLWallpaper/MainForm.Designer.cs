@@ -183,6 +183,7 @@
             this.Text = "NFLWallpaper";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.wallpaperBox.ResumeLayout(false);
             this.wallpaperBox.PerformLayout();
