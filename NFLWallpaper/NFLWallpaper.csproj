@@ -28,7 +28,7 @@
     <PublisherName>RootPhish</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationRevision>20</ApplicationRevision>
     <ApplicationVersion>0.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -157,7 +157,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Background\background.jpg" />
+    <EmbeddedResource Include="Resources\Background\Stadium Night.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Helmets\SD.png" />
@@ -195,7 +195,7 @@
     <EmbeddedResource Include="Resources\Helmets\WAS.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Background\wallpaper.jpg" />
+    <EmbeddedResource Include="Resources\Background\Grass with NFL Logo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

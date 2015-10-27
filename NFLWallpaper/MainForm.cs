@@ -40,6 +40,13 @@ namespace NFLWallpaper
             try
             {
                 teamSelectionCombo.SelectedItem = Helper.GetEntry(retrieveData.TeamFullNames, Application.UserAppDataRegistry.GetValue("DefaultTeam").ToString());
+                string background = Application.UserAppDataRegistry.GetValue("Background").ToString();
+                if (! bgSelectionCombo.Items.Contains(background)) {
+                    bgSelectionCombo.Items.Remove("Other...");
+                    bgSelectionCombo.Items.Add(background);
+                    bgSelectionCombo.Items.Add("Other...");
+                }
+                bgSelectionCombo.SelectedItem = background;
                 string wallpaperStyle = Application.UserAppDataRegistry.GetValue("WallpaperStyle").ToString();
                 switch (wallpaperStyle)
                 {
@@ -126,6 +133,7 @@ namespace NFLWallpaper
             try
             {
                 Application.UserAppDataRegistry.SetValue("DefaultTeam", ((KeyValuePair<string, string>)teamSelectionCombo.SelectedItem).Key.ToString());
+                Application.UserAppDataRegistry.SetValue("Background", bgSelectionCombo.SelectedItem.ToString());
                 var checkedButton = wallpaperBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
                 Application.UserAppDataRegistry.SetValue("WallpaperStyle", checkedButton.Text);
             }
