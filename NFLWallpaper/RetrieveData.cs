@@ -64,7 +64,7 @@ string key)
         private void loadSchedule()
         {
             try {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.nfl.com/liveupdate/scorestrip/ss.xml");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.nfl.com/liveupdate/scorestrip/postseason/ss.xml");
 
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
