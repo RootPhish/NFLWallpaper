@@ -33,7 +33,7 @@ string key)
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(RetrieveData));
 
-        private XDocument[] weekSchedules = new XDocument[3];
+        private XDocument curWeek, nextWeek;
         private PrivateFontCollection pfc;
 
         public RetrieveData()
@@ -50,17 +50,6 @@ string key)
             }
         }
 
-        private string scheduleURL(int year, string type, int week)
-        {
-            string baseURL = "http://www.nfl.com/ajax/scorestrip?season={0}&seasonType={1}&week={2}";
-            if (type == "POST")
-            {
-                week += 17;
-                if (week == 21) { week += 1; }
-            }
-            return string.Format(baseURL, year, type, week);
-        }
-
         private void loadSchedule()
         {
             try {
@@ -75,34 +64,33 @@ string key)
                         select new
                         {
                             type = item.Attribute("t").Value,
-                            year = int.Parse(item.Attribute("y").Value),
-                            week = int.Parse(item.Attribute("w").Value)
+                            year = item.Attribute("y").Value,
+                            week = item.Attribute("w").Value
                         }).First();
                     string gameType;
-                    int gameWeek = gms.week;
                     switch (gms.type)
                     {
+                        case "R":
+                            gameType = "REG";
+                            break;
                         case "P":
                             gameType = "PRE";
                             break;
-                        case "PRO":
-                        case "POST":
-                            gameType = "POST";
-                            gameWeek -= 17;
-                            break;
                         default:
-                            gameType = "REG";
+                            gameType = "";
                             break;
                     }
-                    HttpWebRequest httpRequest;
-                    for (int counter = 0; counter <= 2; counter++)
+                    HttpWebRequest curWeekRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.nfl.com/ajax/scorestrip?season={0}&seasonType={1}&week={2}", gms.year, gameType, gms.week));
+                    using (HttpWebResponse subResponse = (HttpWebResponse)curWeekRequest.GetResponse())
                     {
-                        httpRequest = (HttpWebRequest)WebRequest.Create(scheduleURL(gms.year, gameType, gameWeek + counter));
-                        using (HttpWebResponse subResponse = (HttpWebResponse)httpRequest.GetResponse())
-                        {
-                            StreamReader subReader = new StreamReader(subResponse.GetResponseStream());
-                            weekSchedules[counter] = XDocument.Load(subReader);
-                        }
+                        StreamReader subReader = new StreamReader(subResponse.GetResponseStream());
+                        curWeek = XDocument.Load(subReader);
+                    }
+                    HttpWebRequest nextWeekRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.nfl.com/ajax/scorestrip?season={0}&seasonType={1}&week={2}", gms.year, gameType, int.Parse(gms.week) + 1));
+                    using (HttpWebResponse subResponse = (HttpWebResponse)nextWeekRequest.GetResponse())
+                    {
+                        StreamReader subReader = new StreamReader(subResponse.GetResponseStream());
+                        nextWeek = XDocument.Load(subReader);
                     }
                 }
             } catch (Exception e)
@@ -229,8 +217,7 @@ string key)
         public MatchData getData(string teamAbbr)
         {
             // First get the date and time for this week's game. If it has already passed, go to next week's game.
-            MatchData matchData = new MatchData();
-            var data = from item in weekSchedules[0].Descendants("g")
+            var data = from item in curWeek.Descendants("g")
                        where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
                        select new
                        {
@@ -243,32 +230,19 @@ string key)
             var p = data.FirstOrDefault();
             if ((p == null) || (DatePassed(p.eid.ToString(), p.time.ToString())))  // if p is null then there is probably a Bye week for the selected team
             {
-                data = from item in weekSchedules[1].Descendants("g")
-                       where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
-                       select new
-                       {
-                           eid = item.Attribute("eid").Value,
-                           home = item.Attribute("h").Value,
-                           away = item.Attribute("v").Value,
-                           time = item.Attribute("t").Value,
-                           day = item.Attribute("d").Value
-                       };
+                data = from item in nextWeek.Descendants("g")
+                           where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
+                           select new
+                           {
+                               eid = item.Attribute("eid").Value,
+                               home = item.Attribute("h").Value,
+                               away = item.Attribute("v").Value,
+                               time = item.Attribute("t").Value,
+                               day = item.Attribute("d").Value
+                           };
                 p = data.FirstOrDefault();
             }
-            if (p == null)
-            {
-                data = from item in weekSchedules[2].Descendants("g")
-                       where (string)item.Attribute("v") == teamAbbr || (string)item.Attribute("h") == teamAbbr
-                       select new
-                       {
-                           eid = item.Attribute("eid").Value,
-                           home = item.Attribute("h").Value,
-                           away = item.Attribute("v").Value,
-                           time = item.Attribute("t").Value,
-                           day = item.Attribute("d").Value
-                       };
-                p = data.FirstOrDefault();
-            }
+            MatchData matchData = new MatchData();
             if (p != null)
             {
                 matchData.eid = p.eid.ToString();
