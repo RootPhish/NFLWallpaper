@@ -176,7 +176,7 @@
     <EmbeddedResource Include="Resources\Helmets\GB.png" />
     <EmbeddedResource Include="Resources\Helmets\HOU.png" />
     <EmbeddedResource Include="Resources\Helmets\IND.png" />
-    <EmbeddedResource Include="Resources\Helmets\JAC.png" />
+    <EmbeddedResource Include="Resources\Helmets\JAX.png" />
     <EmbeddedResource Include="Resources\Helmets\KC.png" />
     <EmbeddedResource Include="Resources\Helmets\MIA.png" />
     <EmbeddedResource Include="Resources\Helmets\MIN.png" />
@@ -189,7 +189,7 @@
     <EmbeddedResource Include="Resources\Helmets\PIT.png" />
     <EmbeddedResource Include="Resources\Helmets\SEA.png" />
     <EmbeddedResource Include="Resources\Helmets\SF.png" />
-    <EmbeddedResource Include="Resources\Helmets\STL.png" />
+    <EmbeddedResource Include="Resources\Helmets\LA.png" />
     <EmbeddedResource Include="Resources\Helmets\TB.png" />
     <EmbeddedResource Include="Resources\Helmets\TEN.png" />
     <EmbeddedResource Include="Resources\Helmets\WAS.png" />
